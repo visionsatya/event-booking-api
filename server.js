@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3000;
     await sequelize.sync(); // optional
 
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
+      console.log(`🚀 Server running on http://localhost:${PORT}/api/health`);
     });
   } catch (err) {
     console.error("❌ DB connection failed:", err);
