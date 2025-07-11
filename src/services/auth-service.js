@@ -35,7 +35,7 @@ const createUser = async (userData) => {
   });
 
   // Generate token
-  const token = generateToken(user.id);
+  const token = generateToken(user.id, user.role);
 
   return {
     user: {
@@ -65,7 +65,7 @@ const loginUser = async (userData) => {
       message: "Invalid password",
     };
   }
-  const token = generateToken(user.id);
+  const token = generateToken(user.id, user.role);
   return {
     user: user,
     token: token,

@@ -1,6 +1,6 @@
 // Initializes and associates all Sequelize models
 import sequelize from "../config/database.js";
-import User from "./User.js";
+import User from "./user.js";
 
 // Import other models as they are created
 // import Event from './Event.js';

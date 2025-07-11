@@ -19,4 +19,9 @@ const updateUserProfile = async (userId, userData) => {
   return user;
 };
 
-export { getUserProfileById, updateUserProfile };
+const getAllUsers = async () => {
+  const users = await User.findAll();
+  return users;
+};
+
+export { getUserProfileById, updateUserProfile, getAllUsers };
