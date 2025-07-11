@@ -11,12 +11,14 @@ A comprehensive event booking system built with Node.js, Express, and PostgreSQL
 ## Setup Instructions
 
 ### 1. Clone the Repository
+
 ```bash
 git clone <repository-url>
 cd event-booking-api
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 npm install
 ```
@@ -24,6 +26,7 @@ npm install
 ### 3. Database Setup
 
 #### Option A: Using PostgreSQL CLI
+
 ```bash
 # Connect to PostgreSQL as superuser
 psql -U postgres
@@ -42,6 +45,7 @@ GRANT ALL PRIVILEGES ON DATABASE event_booking_system TO event_user;
 ```
 
 #### Option B: Using pgAdmin
+
 1. Open pgAdmin
 2. Right-click on "Databases"
 3. Select "Create" > "Database"
@@ -83,11 +87,13 @@ NODE_ENV=development
 ### 5. Run the Application
 
 #### Development Mode
+
 ```bash
 npm run dev
 ```
 
 #### Production Mode
+
 ```bash
 npm start
 ```
@@ -110,6 +116,106 @@ src/
 ## API Endpoints
 
 The API will be available at `http://localhost:3000`
+
+### User Export Endpoints
+
+#### Export Users as CSV
+
+```bash
+GET /api/users/export?format=csv
+```
+
+**Headers Required:**
+
+- `Authorization: Bearer <your_jwt_token>`
+
+**Response:** Downloads a CSV file with user data including:
+
+- ID, University ID, Email, First Name, Last Name, Phone Number, Role, Active Status, Created At, Updated At
+
+#### Export Users as PDF
+
+```bash
+GET /api/users/export?format=pdf
+```
+
+**Headers Required:**
+
+- `Authorization: Bearer <your_jwt_token>`
+
+**Response:** Downloads a PDF file with formatted user report including:
+
+- Title and generation date
+- Tabular data with user information
+- Summary with total user count
+
+#### Default Export (CSV)
+
+```bash
+GET /api/users/export
+```
+
+**Headers Required:**
+
+- `Authorization: Bearer <your_jwt_token>`
+
+**Response:** Downloads CSV file (same as `?format=csv`)
+
+### Authentication
+
+All export endpoints require authentication with a valid JWT token. Only users with `super_admin` role can access these endpoints.
+
+### Example Usage
+
+#### Using cURL
+
+```bash
+# Export as CSV
+curl -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+     -o users.csv \
+     "http://localhost:3000/api/users/export?format=csv"
+
+# Export as PDF
+curl -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+     -o users.pdf \
+     "http://localhost:3000/api/users/export?format=pdf"
+```
+
+#### Using JavaScript/Fetch
+
+```javascript
+// Export as CSV
+const response = await fetch(
+  "http://localhost:3000/api/users/export?format=csv",
+  {
+    headers: {
+      Authorization: "Bearer YOUR_JWT_TOKEN",
+    },
+  }
+);
+const blob = await response.blob();
+const url = window.URL.createObjectURL(blob);
+const a = document.createElement("a");
+a.href = url;
+a.download = "users.csv";
+a.click();
+
+// Export as PDF
+const response = await fetch(
+  "http://localhost:3000/api/users/export?format=pdf",
+  {
+    headers: {
+      Authorization: "Bearer YOUR_JWT_TOKEN",
+    },
+  }
+);
+const blob = await response.blob();
+const url = window.URL.createObjectURL(blob);
+const a = document.createElement("a");
+a.href = url;
+a.download = "users.pdf";
+a.click();
+```
 
 ## Troubleshooting
 

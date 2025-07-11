@@ -5,6 +5,8 @@ import {
   getProfile,
   updateProfile,
   getAllUsersList,
+  userExport,
+  updateUserRole,
 } from "../controllers/user-controller.js";
 
 const router = express.Router();
@@ -12,6 +14,10 @@ const router = express.Router();
 router.get("/profile", authMiddleware, getProfile);
 router.put("/profile/update", authMiddleware, updateProfile);
 
-router.get("/list", authMiddleware, getAllUsersList);
+router.get("/", authMiddleware, getAllUsersList);
+
+router.get("/export", authMiddleware, userExport);
+
+router.put("/:id", authMiddleware, updateUserRole);
 
 export default router;

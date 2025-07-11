@@ -4,6 +4,9 @@ import {
   getUserProfileById,
   updateUserProfile,
   getAllUsers,
+  convertToCSV,
+  convertToPDF,
+  updateRole,
 } from "../services/user-service.js";
 
 const getProfile = async (req, res) => {
@@ -60,4 +63,65 @@ const getAllUsersList = async (req, res) => {
   }
 };
 
-export { getProfile, updateProfile, getAllUsersList };
+const userExport = async (req, res) => {
+  try {
+    if (req.user.role === "super_admin") {
+      const users = await getAllUsers();
+      const format = req.query.format?.toLowerCase() || "csv";
+
+      if (format === "pdf") {
+        const pdfBuffer = await convertToPDF(users);
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader(
+          "Content-Disposition",
+          "attachment; filename=users-report.pdf"
+        );
+        res.status(200).send(pdfBuffer);
+      } else if (format === "csv") {
+        const csv = await convertToCSV(users);
+        res.setHeader("Content-Type", "text/csv");
+        res.setHeader(
+          "Content-Disposition",
+          "attachment; filename=users-report.csv"
+        );
+        res.status(200).send(csv);
+      } else {
+        res.status(400).json({
+          message: "Invalid format. Supported formats: csv, pdf",
+        });
+      }
+    } else {
+      res.status(403).json({ message: "Unauthorized" });
+    }
+  } catch (error) {
+    console.error("Error exporting users:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const updateUserRole = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const userData = req.body;
+    if (req.user.role === "super_admin") {
+      const user = await updateRole(userId, userData);
+      res.status(200).json({
+        message: "User role updated successfully",
+        user: user,
+      });
+    } else {
+      res.status(403).json({ message: "Unauthorized" });
+    }
+  } catch (error) {
+    console.error("Error updating user role:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export {
+  getProfile,
+  updateProfile,
+  getAllUsersList,
+  userExport,
+  updateUserRole,
+};
