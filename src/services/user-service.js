@@ -10,4 +10,13 @@ const getUserProfileById = async (userId) => {
   return user;
 };
 
-export { getUserProfileById };
+const updateUserProfile = async (userId, userData) => {
+  const user = await User.findByPk(userId);
+  if (!user) {
+    throw new Error("User not found");
+  }
+  await user.update(userData);
+  return user;
+};
+
+export { getUserProfileById, updateUserProfile };
