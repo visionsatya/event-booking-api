@@ -3,5 +3,12 @@ import healthCheckRoutes from "./health-check.js";
 import authRoutes from "./auth-routes.js";
 import userRoutes from "./user-routes.js";
 import eventRoutes from "./event-routes.js";
+import bookingRoutes from "./booking-routes.js";
 
-export { healthCheckRoutes, authRoutes, userRoutes, eventRoutes };
+export {
+  healthCheckRoutes,
+  authRoutes,
+  userRoutes,
+  eventRoutes,
+  bookingRoutes,
+};

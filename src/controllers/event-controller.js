@@ -36,7 +36,7 @@ const createEvent = async (req, res) => {
     const role = req.user.role;
     let event;
     if (role === "super_admin" || role === "event_organizer") {
-      event = await createEventService(req.body, req.user.id);
+      event = await createEventService(req.body, req.user.userId);
     } else {
       res.status(403).json({ message: "Forbidden" });
       return;
@@ -61,7 +61,7 @@ const updateEvent = async (req, res) => {
     if (role === "super_admin" || role === "event_organizer") {
       event = await event.update({
         ...req.body,
-        updated_by_user_id: req.user.id,
+        updated_by_user_id: req.user.userId,
       });
     } else {
       res.status(403).json({ message: "Forbidden" });
